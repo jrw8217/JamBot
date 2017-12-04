@@ -161,11 +161,11 @@ def find_root_note_from_midi_file(tempo_folder, root_note_folder):
 
 
 
-print('changing Tempo')
-change_tempo_folder('Beatles', 'Beatles_tempo')
+#print('changing Tempo')
+#change_tempo_folder('Beatles', 'Beatles_tempo')
 
 
 print('finding chord')
-find_root_note_from_midi_file('Beatles_tempo', 'Beatles_chord')
+find_root_note_from_midi_file('data/tempo', 'data/chord')
 
 
