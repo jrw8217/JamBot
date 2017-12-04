@@ -33,34 +33,54 @@ major_scale = [0, 2, 4, 5, 7, 9, 11]
 major_triad_chords = ['', 'm', 'm', '', '', 'm', 'dim']
 major_seventh_chords = ['M7', 'm7', 'm7', 'M7', '7', 'm7', 'm7-5']
 
+major_notes = [['C', 'D', 'E', 'F', 'G', 'A', 'B'], ['Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C'], ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
+               ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D'], ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'], ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
+               ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#'], ['G', 'A', 'B', 'C', 'D', 'E', 'F#'], ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G'],
+               ['A' ,'B', 'C#', 'D', 'E', 'F#', 'G#'], ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A'], ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#']]
+
 
 minor_scale = [0, 2, 3, 5, 7, 8, 10]
 minor_triad_chords = ['m', 'dim', '', 'm', 'm', '', '']
 minor_seventh_chords = ['m7', 'm7-5', 'M7', 'm7', 'm7', 'M7', '7']
 
-minor_notes = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+minor_notes = [['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb'], ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'], ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'],
+               ['Eb', 'F', 'Gb', 'Ab', 'Bb', 'Cb', 'Db'], ['E', 'F#', 'G', 'A', 'B', 'C', 'D'], ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb'],
+               ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E'], ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F'], ['Ab', 'Bb', 'Cb', 'Db', 'Eb', 'Fb', 'Gb'],
+               ['A', 'B', 'C', 'D', 'E', 'F', 'G'], ['Bb', 'C', 'Db', 'Eb', 'F', 'Gb', 'Ab'], ['B', 'C#', 'D', 'E', 'F#', 'G', 'A']
+               ]
 
 
 
-def find_chord_from_root_note(key = 'Am', root_list = [], is_triad = True):
+def find_chord_from_root_note(key = 0, root_list = [], is_triad = True):
     chord_list = []
 
-    key_number = pm.key_name_to_key_number(key)
-    scale_degree = key_number % 12
+    #key_number = pm.key_name_to_key_number(key)
+    scale_degree = key % 12
 
-    if key_number <= 11:     # Major Chord
+    if key <= 11:     # Major Chord
         for root_note in root_list:
             root_degree = (root_note - scale_degree) % 12
 
+            if root_degree in major_scale:
+                root_ind = major_scale.index(root_degree)
+                chord_name = major_notes[scale_degree][root_ind] + major_seventh_chords[root_ind]
+                chord_list.append(chord_name)
+
+            else:
+                chord_list.append('-')
 
 
-    if key_number > 11 :        # Minor Chord
+    if key > 11 :        # Minor Chord
         for root_note in root_list:
             root_degree = (root_note - scale_degree) % 12
-            root_ind = minor_scale.index(root_degree)
-            chord_name = minor_notes[root_ind] + minor_triad_chords[root_ind]
-            chord_list.append(chord_name)
 
+            if root_degree in minor_scale:
+                root_ind = minor_scale.index(root_degree)
+                chord_name = minor_notes[scale_degree][root_ind] + minor_seventh_chords[root_ind]
+                chord_list.append(chord_name)
+
+            else:
+                chord_list.append('-')
 
     return chord_list
 
@@ -68,7 +88,7 @@ def find_chord_from_root_note(key = 'Am', root_list = [], is_triad = True):
 
 def root_note_from_midi(samples_per_bar, fs, name, path, target_path):
     print '---------------------------------------------'
-    print name
+    print path + '/' + name
 
 
     #piano_roll = mf.get_pianoroll(name, path, fs)
@@ -87,13 +107,15 @@ def root_note_from_midi(samples_per_bar, fs, name, path, target_path):
 
 
     # Get Key
+    key = 0
     if len(mid.key_signature_changes) > 0:
-        for mid_key in mid.key_signature_changes:
-            print 'key:', mid_key.key_number, 'at', mid_key.time
-    #else:
-        #score = music21.converter.parse(name)
-        #key = score.analyze('key')
-        #print key.tonic.name, key.mode
+        key = mid.key_signature_changes[0].key_number   # ignore key change
+
+    else:
+        print name, 'does not have any key_signature_change'
+        return -1
+
+    print 'key: ', key
 
 
     # Get the root note of each bar
@@ -112,8 +134,9 @@ def root_note_from_midi(samples_per_bar, fs, name, path, target_path):
         root_list.append(root_note)
 
 
-    #chord_list = find_chord_from_root_note(root_list = root_list)
-    #print chord_list
+    chord_list = find_chord_from_root_note(key = key, root_list = root_list)
+    print chord_list
+    pickle.dump(chord_list, open(target_path + name + '_chord.pickle', 'wb'))
 
 
 
@@ -122,6 +145,7 @@ def root_note_from_midi(samples_per_bar, fs, name, path, target_path):
 def find_root_note_from_midi_file(tempo_folder, root_note_folder):
     print(tempo_folder)
     for path, subdirs, files in os.walk(tempo_folder):
+        print(subdirs)
         for name in files:
             _path = path.replace('\\', '/') + '/'
             _name = name.replace('\\', '/')
@@ -130,7 +154,7 @@ def find_root_note_from_midi_file(tempo_folder, root_note_folder):
                 os.makedirs(target_path)
             try:
                 root_note_from_midi(samples_per_bar, fs, _name, _path, target_path)
-            except (ValueError, EOFError, IndexError, OSError, KeyError, ZeroDivisionError) as e:
+            except (ValueError, EOFError, IndexError, OSError, KeyError, ZeroDivisionError, IOError) as e:
                 exception_str = 'Unexpected error in ' + name  + ':\n', e, sys.exc_info()[0]
                 print(exception_str)
 #                invalid_files_counter +=1
@@ -138,10 +162,10 @@ def find_root_note_from_midi_file(tempo_folder, root_note_folder):
 
 
 print('changing Tempo')
-change_tempo_folder(source_folder, tempo_folder1)
+change_tempo_folder('Beatles', 'Beatles_tempo')
 
 
-print('finding root note')
-find_root_note_from_midi_file(tempo_folder1, 'data/root')
+print('finding chord')
+find_root_note_from_midi_file('Beatles_tempo', 'Beatles_chord')
 
 
