@@ -1,7 +1,7 @@
 from settings import *
 import numpy as np
 import midi_functions as mf
-import _pickle as pickle
+import pickle
 import os
 import sys
 import pretty_midi as pm
@@ -273,14 +273,16 @@ def note_ind_folder(tempo_folder,roll_folder):
 def change_tempo_folder(source_folder,tempo_folder):
     for path, subdirs, files in os.walk(source_folder):
         for name in files:
+            print name
             _path = path.replace('\\', '/') + '/'
             _name = name.replace('\\', '/')
             target_path = tempo_folder+_path[len(source_folder):]
+            print 'testing....'
             if not os.path.exists(target_path):
                 os.makedirs(target_path) 
             try:
                 mf.change_tempo(_name, _path, target_path)
-            except (ValueError, EOFError, IndexError, OSError, KeyError, ZeroDivisionError, AttributeError) as e:
+            except (ValueError, EOFError, IndexError, OSError, KeyError, ZeroDivisionError, AttributeError, IOError) as e:
                 exception_str = 'Unexpected error in ' + name  + ':\n', e, sys.exc_info()[0]
                 print(exception_str)
 #                invalid_files_counter +=1

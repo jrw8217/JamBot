@@ -2,7 +2,7 @@
 from settings import *
 import numpy as np
 import midi_functions as mf
-import _pickle as pickle
+import pickle
 import os
 import sys
 import pretty_midi as pm

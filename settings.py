@@ -1,4 +1,4 @@
-
+from time import localtime, time
 
 shifted = True
 
@@ -7,7 +7,8 @@ if shifted:
     shift_folder = 'shifted/'
 
 # If you only want to process a subfolder like '/A' or '/A/A' for tests
-subfolder = '/A'
+
+subfolder = '/lakh'
 
 source_folder = 'data/original' + subfolder
 tempo_folder1 = 'data/'  + 'tempo' + subfolder
