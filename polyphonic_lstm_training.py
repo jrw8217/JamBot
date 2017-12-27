@@ -14,7 +14,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import os
 import numpy as np
-import _pickle as pickle
+import pickle
 
 import data_class
 import chord_model
@@ -33,7 +33,7 @@ from keras.backend.tensorflow_backend import set_session
 
 
 # Path to the fully trained chord model for the chord embeddings:
-chord_model_path = 'models/chords/Shifted_True_Lr_1e-05_EmDim_10_opt_Adam_bi_False_lstmsize_256_trainsize_30_testsize_5/model_Epoch18.h5'
+chord_model_path = 'models/chords/Shifted_True_Lr_1e-05_EmDim_10_opt_Adam_bi_False_lstmsize_256_trainsize_30_testsize_5/model_Epoch20.h5'
 # Path where the polyphonic models are saved:
 model_path = 'models/chords_mldy/'
 model_filetype = '.h5'

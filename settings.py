@@ -10,19 +10,19 @@ if shifted:
 
 subfolder = '/lakh'
 
-source_folder = 'data/original' + subfolder
-tempo_folder1 = 'data/'  + 'tempo' + subfolder
-histo_folder1 = 'data/'  + 'histo' + subfolder
+source_folder = 'data/data/original' + subfolder
+tempo_folder1 = 'data/data/'  + 'tempo' + subfolder
+histo_folder1 = 'data/data/'  + 'histo' + subfolder
 
 
-tempo_folder2 = 'data/' + shift_folder + 'tempo' + subfolder
-shifted_folder = 'data/' + shift_folder + 'shifted' + subfolder
-pickle_folder = 'data/' + shift_folder + 'pianoroll' + subfolder
-roll_folder = 'data/' + shift_folder + 'indroll' + subfolder
-histo_folder2 = 'data/' + shift_folder + 'histo' + subfolder
-chords_folder = 'data/' + shift_folder + 'chords' + subfolder
-chords_index_folder = 'data/' + shift_folder + 'chord_index' + subfolder
-song_histo_folder = 'data/' + shift_folder + 'song_histo' + subfolder
+tempo_folder2 = 'data/data/' + shift_folder + 'tempo' + subfolder
+shifted_folder = 'data/data/' + shift_folder + 'shifted' + subfolder
+pickle_folder = 'data/data/' + shift_folder + 'pianoroll' + subfolder
+roll_folder = 'data/data/' + shift_folder + 'indroll' + subfolder
+histo_folder2 = 'data/data/' + shift_folder + 'histo' + subfolder
+chords_folder = 'data/data/' + shift_folder + 'chords' + subfolder
+chords_index_folder = 'data/data/' + shift_folder + 'chord_index' + subfolder
+song_histo_folder = 'data/data/' + shift_folder + 'song_histo' + subfolder
 
 
 
@@ -38,7 +38,7 @@ song_histo_folder = 'data/' + shift_folder + 'song_histo' + subfolder
 #shifted_folder = 'data/' + shift_folder + 'test_shifted'
 
 
-dict_path = 'data/'
+dict_path = 'data/data/'
 chord_dict_name = 'chord_dict.pickle'
 index_dict_name = 'index_dict.pickle'
 
