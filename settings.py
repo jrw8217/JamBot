@@ -8,10 +8,10 @@ if shifted:
 
 # If you only want to process a subfolder like '/A' or '/A/A' for tests
 
-subfolder = '/test_lmd'
+subfolder = '/lmd_matched'
 
-data_folder = '/home/wan/Documents/projects/data'
-processed_folder = '/home/wan/Documents/projects/data_processed/test_lmd_with_JamBot'
+data_folder = '/data1/lakh'
+processed_folder = '/data1/lakh/test_lmd_with_JamBot'
 
 source_folder = data_folder + subfolder
 tempo_folder1 = processed_folder  + '/tempo' + subfolder
