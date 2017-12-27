@@ -30,7 +30,10 @@ minor_notes = [['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb'], ['C#', 'D#', 'E', 'F#', '
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
 def find_chord_from_bass_note(key = 0, note_list = []):
     chord_list = []
 
@@ -39,11 +42,14 @@ def find_chord_from_bass_note(key = 0, note_list = []):
 
     if key <= 11:     # Major Chord
         for root_note in note_list:
+<<<<<<< HEAD
 
             if root_note == -1:
                 chord_list.append('-')
                 continue
 
+=======
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
             root_degree = (root_note - scale_degree) % 12
 
             if root_degree in major_scale:
@@ -57,11 +63,14 @@ def find_chord_from_bass_note(key = 0, note_list = []):
 
     if key > 11 :        # Minor Chord
         for root_note in note_list:
+<<<<<<< HEAD
 
             if root_note == -1:
                 chord_list.append('-')
                 continue
 
+=======
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
             root_degree = (root_note - scale_degree) % 12
 
             if root_degree in minor_scale:
@@ -80,10 +89,18 @@ def find_chord_from_bass_note(key = 0, note_list = []):
 
 
 def get_key_and_bass_note_from_midi(name, path):
+<<<<<<< HEAD
 
     print name
 
     mid = pm.PrettyMIDI(os.path.join(path, name) + '.mid')
+=======
+    print '-----------------------------------------------------------'
+    print name
+
+    mid = pm.PrettyMIDI(path + name)
+    print 'Instruments: ', mid.instruments
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
 
     # Get key
     if len(mid.key_signature_changes) > 0:
@@ -103,14 +120,19 @@ def get_key_and_bass_note_from_midi(name, path):
 
         if instrument.program < 40 and instrument.program > 31: # find bass from program number
             print instrument.name
+<<<<<<< HEAD
             bass_piano_roll = np.copy(instrument.get_piano_roll(fs=8))
 
+=======
+            bass_piano_roll = np.copy(instrument.get_piano_roll(fs=2))
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
             bass_counter += 1
 
     if bass_counter == 0:
         print name, 'does not have any bass instrument'
         return -1
 
+<<<<<<< HEAD
     bass_notes = []
 
     print bass_piano_roll.shape[1]
@@ -129,17 +151,42 @@ def get_key_and_bass_note_from_midi(name, path):
 
     print key, bass_notes
     return key, bass_notes
+=======
+    bass_note = []
+
+    print bass_piano_roll.shape[1]
+    for half_note in range(bass_piano_roll.shape[1]):
+
+        notes = bass_piano_roll[:, half_note].nonzero()[0]
+
+        if notes.size != 0:
+            note = notes[0]
+
+        else:
+            note = -1
+
+        bass_note.append(note)
+
+
+    print key, bass_note
+    return key, bass_note
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
 
 
 
 def find_chord_from_midi_file(midi_folder, target_folder):
     invalid_files_counter = 0
 
+<<<<<<< HEAD
 
     for path, subdirs, files in os.walk(midi_folder):
 
         for name in files:
             print name
+=======
+    for path, subdirs, files in os.walk(midi_folder):
+        for name in files:
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
             _path = path.replace('\\', '/') + '/'
             _name = name.replace('\\', '/')
             target_path = target_folder+_path[len(midi_folder):]
@@ -170,6 +217,10 @@ def find_chord_from_midi_file(midi_folder, target_folder):
 
 
 
+<<<<<<< HEAD
 if __name__ == '__main__':
     find_chord_from_midi_file('Yesterday_with_bass_16', 'Yeaterday_with_bass_16_chord')
     print 'hello'
+=======
+find_chord_from_midi_file('Yesterday_with_bass', 'Yeaterday_with_bass_chord')
+>>>>>>> e97ce90eef9627871dd81eb23ef5c75ef4a7e3e9
