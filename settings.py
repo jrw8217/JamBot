@@ -4,25 +4,28 @@ shifted = True
 
 shift_folder = ''
 if shifted:
-    shift_folder = 'shifted/'
+    shift_folder = '/shifted'
 
 # If you only want to process a subfolder like '/A' or '/A/A' for tests
 
-subfolder = '/lakh'
+subfolder = '/test_lmd'
 
-source_folder = 'data/data/original' + subfolder
-tempo_folder1 = 'data/data/'  + 'tempo' + subfolder
-histo_folder1 = 'data/data/'  + 'histo' + subfolder
+data_folder = '/home/wan/Documents/projects/data'
+processed_folder = '/home/wan/Documents/projects/data_processed/test_lmd_with_JamBot'
+
+source_folder = data_folder + subfolder
+tempo_folder1 = processed_folder  + '/tempo' + subfolder
+histo_folder1 = processed_folder  + '/histo' + subfolder
 
 
-tempo_folder2 = 'data/data/' + shift_folder + 'tempo' + subfolder
-shifted_folder = 'data/data/' + shift_folder + 'shifted' + subfolder
-pickle_folder = 'data/data/' + shift_folder + 'pianoroll' + subfolder
-roll_folder = 'data/data/' + shift_folder + 'indroll' + subfolder
-histo_folder2 = 'data/data/' + shift_folder + 'histo' + subfolder
-chords_folder = 'data/data/' + shift_folder + 'chords' + subfolder
-chords_index_folder = 'data/data/' + shift_folder + 'chord_index' + subfolder
-song_histo_folder = 'data/data/' + shift_folder + 'song_histo' + subfolder
+tempo_folder2 = processed_folder + shift_folder + '/tempo' + subfolder
+shifted_folder = processed_folder + shift_folder + '/shifted' + subfolder
+pickle_folder = processed_folder + shift_folder + '/pianoroll' + subfolder
+roll_folder = processed_folder + shift_folder + '/indroll' + subfolder
+histo_folder2 = processed_folder + shift_folder + '/histo' + subfolder
+chords_folder = processed_folder + shift_folder + '/chords' + subfolder
+chords_index_folder = processed_folder + shift_folder + '/chord_index' + subfolder
+song_histo_folder = processed_folder + shift_folder + '/song_histo' + subfolder
 
 
 
@@ -38,7 +41,7 @@ song_histo_folder = 'data/data/' + shift_folder + 'song_histo' + subfolder
 #shifted_folder = 'data/' + shift_folder + 'test_shifted'
 
 
-dict_path = 'data/data/'
+dict_path = processed_folder + '/'
 chord_dict_name = 'chord_dict.pickle'
 index_dict_name = 'index_dict.pickle'
 
