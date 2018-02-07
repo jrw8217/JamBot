@@ -271,9 +271,14 @@ def change_tempo_folder(source_folder,tempo_folder):
                 print track_dir, 'not in midis.json'
                 continue
 
+
         for name in files:
 
             print 'name: ', name
+            midi_name = name[:-4]
+            if midi_name not in midis_list[track_dir].keys():
+                print midi_name + '.mid', 'not in midis.json'
+                continue
 
             _path = path.replace('\\', '/') + '/'
             _name = name.replace('\\', '/')
@@ -296,7 +301,7 @@ def do_all_steps():
     
     print('histogramming')
     save_histo_oct_from_midi_folder(tempo_folder1,histo_folder1)
-    
+   
     print('make song histo')
     save_song_histo_from_histo(histo_folder1,song_histo_folder)
     
@@ -307,7 +312,6 @@ def do_all_steps():
     print('making note indexes')
     note_ind_folder(tempo_folder2,roll_folder)
     
-    
     print('histogramming')
     save_histo_oct_from_midi_folder(tempo_folder2,histo_folder2)
     
@@ -317,6 +321,26 @@ def do_all_steps():
     print('getting dictionary')
     chord_to_index, index_to_chord = make_chord_dict(chords_folder, num_chords)
     
+    print('make song histo')
+    save_song_histo_from_histo(histo_folder1,song_histo_folder)
+
+    print('shifting midi files')
+    shift_midi_files(song_histo_folder,tempo_folder1,tempo_folder2)
+
+
+    print('making note indexes')
+    note_ind_folder(tempo_folder2,roll_folder)
+
+
+    print('histogramming')
+    save_histo_oct_from_midi_folder(tempo_folder2,histo_folder2)
+
+    print('extracting chords')
+    save_chords_from_histo(histo_folder2,chords_folder)
+
+    print('getting dictionary')
+    chord_to_index, index_to_chord = make_chord_dict(chords_folder, num_chords)
+
     print('converting chords to index sequences')
     save_index_from_chords(chords_folder,chords_index_folder)
 
