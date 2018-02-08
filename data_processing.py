@@ -260,7 +260,7 @@ def change_tempo_folder(source_folder,tempo_folder):
     midi_data_path = pickle.load(open('midi_data_paths.pkl', 'rb'))
     for path, subdirs, files in os.walk(source_folder):
         for name in files:
-            print 'name: ', name
+            print('name: ', name)
             if os.path.join(path, name) not in midi_data_path:
                 continue
 
