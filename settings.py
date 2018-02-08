@@ -11,8 +11,9 @@ if shifted:
 subfolder = ''
 
 data_folder = '/data1/lakh/lmd_matched_test_0208'
+# data_folder = '/home/wan/Documents/projects/data/test_lmd'
 processed_folder = '/data1/lakh/lmd_matched_processed_jambot_test_0208'
-
+# processed_folder = '/home/wan/Documents/projects/data_processed/test_lmd_JamBot'
 
 
 source_folder = data_folder

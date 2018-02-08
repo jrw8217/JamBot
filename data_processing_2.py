@@ -8,21 +8,122 @@ import pretty_midi as pm
 import mido
 from collections import Counter
 import json
-    
+from scipy.sparse import csc_matrix
+from midi_functions import *
 
-def histo_of_all_songs():
-    histo = [0]*128
-    for path, subdirs, files in os.walk(tempo_folder):
-        for name in files:
-            _path = path.replace('\\', '/') + '/'
-            _name = name.replace('\\', '/')
-#            _name = _name[:-7]
-            pianoroll = mf.get_pianoroll(_name, _path, fs)
-            histo += np.sum(pianoroll, axis=1)
-#            print(histo)
-#            print(_name)
-    return histo
-        
+
+def msd_id_to_dirs(msd_id):
+    return os.path.join(msd_id[2], msd_id[3], msd_id[4], msd_id)
+
+
+def load_npz(file_):
+    """Load a npz file that contains numpy arrays or scipy csc matrices.
+    Parameters
+    ----------
+    file_ : str or file-like object
+        String that indicates the path to save the file or an opened file where
+        the data will be loaded.
+    Returns
+    -------
+    result : dict of np.array or scipy.sparse.csc_matrix
+        A dictionary that contains the loaded data. The keys are the file names
+        in the npz file and the values are the data. If all files are identified
+        as sparse matrices (by its filename), the data will be converted back to
+        scipy csc matrices.
+    """
+    with np.load(file_) as loaded:
+        non_sparse_keys = [key for key in loaded.files if "_csc_" not in key]
+        if non_sparse_keys:
+            result = {key: loaded[key] for key in loaded.files}
+        else:
+            # if non_sparse matrices found, group arrays coming from the same
+            # csc_matrix and convert them back to one csc_matrix
+            keys = sorted(loaded.files)
+            result = {}
+            for idx in range(int(len(keys)/4)):
+                key = keys[4*idx][:-9] # remove '_csc_data' to get matrix name
+                result[key] = csc_matrix((loaded[keys[4*idx]],
+                                          loaded[keys[4*idx+1]],
+                                          loaded[keys[4*idx+2]]),
+                                         shape=loaded[keys[4*idx+3]])
+    return result
+
+
+def get_dirs(base_dir):
+    dirs = []
+
+    json_path = os.path.join(base_dir, 'midis.json')
+    with open(json_path, 'r') as f:
+        midis = json.load(f)
+
+    song_list = midis.keys()
+    for song in song_list:
+        midi_list = midis[song].keys()
+        for midi in midi_list:
+            _dir = os.path.join(base_dir, msd_id_to_dirs(song), midi)
+            dirs.append(_dir)
+
+    return dirs
+
+
+def testttt(path):
+    chord_cntr = Counter()
+
+    # make chord for each path
+    paths = get_dirs(path)
+    chord_dict = {}
+    for _path in paths:
+        filepath = os.path.join(_path, 'piano_rolls.npz')
+
+        pianorolls = load_npz(filepath)
+
+        idx = 0
+        for track_num, track in pianorolls.items():
+            track_arr = track.toarray()
+            if idx == 0:
+                total = np.zeros_like(track_arr)
+
+            total += track_arr
+
+        total[total > 0] = 1
+
+        histo_bar = pianoroll_to_histo_bar(total, samples_per_bar)
+        histo_oct = histo_bar_to_histo_oct(histo_bar, octave)
+        chords = histo_to_chords(histo_oct, chord_n)
+
+        for chord in chords:
+            if chord in chord_cntr:
+                chord_cntr[chord] += 1
+            else:
+                chord_cntr[chord] = 1
+
+        chord_dict[_path] = chords
+
+    # make chord dict
+    cntr = chord_cntr.most_common(n=num_chords - 1)
+
+    chord_to_index = dict()
+    chord_to_index[UNK] = 0
+    for chord, _ in cntr:
+        chord_to_index[chord] = len(chord_to_index)
+    index_to_chord = {v: k for k, v in chord_to_index.items()}
+    pickle.dump(chord_to_index, open(path + '/chord_to_index.pkl', 'wb'))
+    pickle.dump(index_to_chord, open(path + '/index_to_chord.pkl', 'wb'))
+
+    # make jambot style chord for each midi
+    for _path in paths:
+        chords = chord_dict[_path]
+
+        chords_index = []
+        for chord in chords:
+            if chord in chord_to_index:
+                chords_index.append(chord_to_index[chord])
+            else:
+                chords_index.append(chord_to_index[UNK])
+
+        with open(_path+'/jambot_chord.pkl', 'wb') as f:
+            pickle.dump(chords_index, f)
+
 
 def get_scales():
     # get all scales for every root note
@@ -256,26 +357,6 @@ def note_ind_folder(tempo_folder,roll_folder):
                 print(exception_str)
 #                invalid_files_counter +=1
 
-def change_tempo_folder(source_folder,tempo_folder):
-    # midi_data_path = pickle.load(open('midi_data_paths.pkl', 'rb'))
-    for path, subdirs, files in os.walk(source_folder):
-        for name in files:
-            print('name: ', name)
-            # if os.path.join(path, name) not in midi_data_path:
-            #     continue
-
-            _path = path.replace('\\', '/') + '/'
-            _name = name.replace('\\', '/')
-            target_path = tempo_folder+_path[len(source_folder):]
-
-            if not os.path.exists(target_path):
-                os.makedirs(target_path)
-            try:
-                mf.change_tempo(_name, _path, target_path)
-            except (ValueError, EOFError, IndexError, OSError, KeyError, ZeroDivisionError, AttributeError, IOError) as e:
-                exception_str = 'Unexpected error in ' + name  + ':\n', e, sys.exc_info()[0]
-                print(exception_str)
-#                invalid_files_counter +=1
 
 def do_all_steps():
     
@@ -310,13 +391,14 @@ def do_all_steps():
 
 
 if __name__=="__main__":
-    do_all_steps()
+    # do_all_steps()
 #    key_counter2 = count_keys()
 #    scale_counter2, other_counter2 = count_scales()
 #    shift_midi_files()
 #    histo = histo_of_all_songs()
 #    pickle.dump(histo, open('histo_all_songs.pickle', 'wb'))
 #    chord_counter = count_chords(chords_folder, num_chords)
+    testttt('/data1/lakh/lmd_matched_processed_ckey_melody_labeled_with_logger_0201')
     print('done')
 
 
