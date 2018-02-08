@@ -70,7 +70,10 @@ def testttt(path):
     chord_cntr = Counter()
 
     # make chord for each path
-    paths = get_dirs(path)
+    # paths = get_dirs(path)
+    paths = ['/home/wan/Documents/projects/data_processed/test_lmd_processed/A/A/A/TRAAAGR128F425B14B/5dd29e99ed7bd3cc0c5177a6e9de22ea',
+             '/home/wan/Documents/projects/data_processed/test_lmd_processed/A/A/M/TRAAMBM128F4248306/7e1f7b9134e07ec789e2b2c2f3cbe7c5']
+    print(paths[0])
     chord_dict = {}
     for _path in paths:
         filepath = os.path.join(_path, 'piano_rolls.npz')
@@ -82,11 +85,13 @@ def testttt(path):
             track_arr = track.toarray()
             if idx == 0:
                 total = np.zeros_like(track_arr)
+                idx += 1
 
             total += track_arr
 
         total[total > 0] = 1
 
+        total = np.transpose(total)
         histo_bar = pianoroll_to_histo_bar(total, samples_per_bar)
         histo_oct = histo_bar_to_histo_oct(histo_bar, octave)
         chords = histo_to_chords(histo_oct, chord_n)
@@ -398,6 +403,7 @@ if __name__=="__main__":
 #    histo = histo_of_all_songs()
 #    pickle.dump(histo, open('histo_all_songs.pickle', 'wb'))
 #    chord_counter = count_chords(chords_folder, num_chords)
+#     testttt('/home/wan/Documents/projects/data_processed/test_lmd_processed')
     testttt('/data1/lakh/lmd_matched_processed_ckey_melody_labeled_with_logger_0201')
     print('done')
 
