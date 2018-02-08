@@ -70,9 +70,9 @@ def testttt(path):
     chord_cntr = Counter()
 
     # make chord for each path
-    # paths = get_dirs(path)
-    paths = ['/home/wan/Documents/projects/data_processed/test_lmd_processed/A/A/A/TRAAAGR128F425B14B/5dd29e99ed7bd3cc0c5177a6e9de22ea',
-             '/home/wan/Documents/projects/data_processed/test_lmd_processed/A/A/M/TRAAMBM128F4248306/7e1f7b9134e07ec789e2b2c2f3cbe7c5']
+    paths = get_dirs(path)
+    # paths = ['/home/wan/Documents/projects/data_processed/test_lmd_processed/A/A/A/TRAAAGR128F425B14B/5dd29e99ed7bd3cc0c5177a6e9de22ea',
+    #          '/home/wan/Documents/projects/data_processed/test_lmd_processed/A/A/M/TRAAMBM128F4248306/7e1f7b9134e07ec789e2b2c2f3cbe7c5']
     print(paths[0])
     chord_dict = {}
     for _path in paths:
