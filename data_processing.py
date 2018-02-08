@@ -256,13 +256,15 @@ def note_ind_folder(tempo_folder,roll_folder):
 #                invalid_files_counter +=1
 
 def change_tempo_folder(source_folder,tempo_folder):
-
+    midi_data_path = pickle.load(open('midi_data_paths.pkl', 'rb'))
     for path, subdirs, files in os.walk(source_folder):
         if len(subdirs) > 0:
             continue
 
         for name in files:
             print 'name: ', name
+            if os.path.join(path, name) not in midi_data_path:
+                continue
 
             _path = path.replace('\\', '/') + '/'
             _name = name.replace('\\', '/')
@@ -284,49 +286,29 @@ def do_all_steps():
     change_tempo_folder(source_folder,tempo_folder1) 
     
     print('histogramming')
-    save_histo_oct_from_midi_folder(tempo_folder1,histo_folder1)
+    # save_histo_oct_from_midi_folder(tempo_folder1,histo_folder1)
    
     print('make song histo')
-    save_song_histo_from_histo(histo_folder1,song_histo_folder)
+    # save_song_histo_from_histo(histo_folder1,song_histo_folder)
     
     print('shifting midi files')
-    shift_midi_files(song_histo_folder,tempo_folder1,tempo_folder2)
+    # shift_midi_files(song_histo_folder,tempo_folder1,tempo_folder2)
     
     
     print('making note indexes')
-    note_ind_folder(tempo_folder2,roll_folder)
+    # note_ind_folder(tempo_folder2,roll_folder)
     
     print('histogramming')
-    save_histo_oct_from_midi_folder(tempo_folder2,histo_folder2)
+    # save_histo_oct_from_midi_folder(tempo_folder2,histo_folder2)
     
     print('extracting chords')
-    save_chords_from_histo(histo_folder2,chords_folder)
+    # save_chords_from_histo(histo_folder2,chords_folder)
     
     print('getting dictionary')
-    chord_to_index, index_to_chord = make_chord_dict(chords_folder, num_chords)
-    
-    print('make song histo')
-    save_song_histo_from_histo(histo_folder1,song_histo_folder)
-
-    print('shifting midi files')
-    shift_midi_files(song_histo_folder,tempo_folder1,tempo_folder2)
-
-
-    print('making note indexes')
-    note_ind_folder(tempo_folder2,roll_folder)
-
-
-    print('histogramming')
-    save_histo_oct_from_midi_folder(tempo_folder2,histo_folder2)
-
-    print('extracting chords')
-    save_chords_from_histo(histo_folder2,chords_folder)
-
-    print('getting dictionary')
-    chord_to_index, index_to_chord = make_chord_dict(chords_folder, num_chords)
+    # chord_to_index, index_to_chord = make_chord_dict(chords_folder, num_chords)
 
     print('converting chords to index sequences')
-    save_index_from_chords(chords_folder,chords_index_folder)
+    # save_index_from_chords(chords_folder,chords_index_folder)
 
 
 if __name__=="__main__":

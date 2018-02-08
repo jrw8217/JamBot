@@ -10,7 +10,7 @@ if shifted:
 
 subfolder = ''
 
-data_folder = '/data1/lakh/lmd_matched_processed'
+data_folder = '/data1/lakh/lmd_matched'
 processed_folder = '/data1/lakh/lmd_matched_processed_jambot'
 
 
