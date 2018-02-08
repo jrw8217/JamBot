@@ -285,7 +285,26 @@ def do_all_steps():
     
     print('histogramming')
     save_histo_oct_from_midi_folder(tempo_folder1,histo_folder1)
-
+   
+    print('make song histo')
+    save_song_histo_from_histo(histo_folder1,song_histo_folder)
+    
+    print('shifting midi files')
+    shift_midi_files(song_histo_folder,tempo_folder1,tempo_folder2)
+    
+    
+    print('making note indexes')
+    note_ind_folder(tempo_folder2,roll_folder)
+    
+    print('histogramming')
+    save_histo_oct_from_midi_folder(tempo_folder2,histo_folder2)
+    
+    print('extracting chords')
+    save_chords_from_histo(histo_folder2,chords_folder)
+    
+    print('getting dictionary')
+    chord_to_index, index_to_chord = make_chord_dict(chords_folder, num_chords)
+    
     print('make song histo')
     save_song_histo_from_histo(histo_folder1,song_histo_folder)
 
