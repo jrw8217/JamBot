@@ -257,28 +257,12 @@ def note_ind_folder(tempo_folder,roll_folder):
 
 def change_tempo_folder(source_folder,tempo_folder):
 
-    with open('midis.json') as midis:
-        midis_list = json.load(midis)
-
-
     for path, subdirs, files in os.walk(source_folder):
-        print 'path: ', path
-        print 'subdirs: ', subdirs
-        print 'files: ', file
-        if not subdirs:
-            track_dir = path[path.rfind('/')+1:]
-            if track_dir not in midis_list.keys():
-                print track_dir, 'not in midis.json'
-                continue
-
+        if len(subdirs) > 0:
+            continue
 
         for name in files:
-
             print 'name: ', name
-            midi_name = name[:-4]
-            if midi_name not in midis_list[track_dir].keys():
-                print midi_name + '.mid', 'not in midis.json'
-                continue
 
             _path = path.replace('\\', '/') + '/'
             _name = name.replace('\\', '/')
